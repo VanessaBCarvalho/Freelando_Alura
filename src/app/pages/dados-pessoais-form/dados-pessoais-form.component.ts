@@ -7,6 +7,8 @@ import { CadastroService } from '../../shared/services/cadastro.service';
 import { BehaviorSubject, Observable, of, startWith, switchMap, tap } from 'rxjs';
 import { Cidade, Estado, IbgeService } from '../../shared/services/ibge.service';
 import { cpfValidator } from '../../shared/validators/cpf.validator';
+import { EmailValidadorService } from '../../shared/services/email-validador.service';
+import { emailExistenteValidator } from '../../shared/validators/emailExistente.validator';
 
 export const senhasIguaisValidator: ValidatorFn = (control: AbstractControl): ValidationErrors | null => {
   const senha = control.get('senha');
@@ -38,7 +40,8 @@ export class DadosPessoaisFormComponent implements OnInit{
     private fb: FormBuilder,
     private router: Router,
     private cadastroService: CadastroService,
-    private ibgeService: IbgeService
+    private ibgeService: IbgeService,
+    private emailService: EmailValidadorService
   ){
 
   }
@@ -53,7 +56,7 @@ ngOnInit(): void {
     cpf: ['', [Validators.required, cpfValidator]],
     estado: ['', Validators.required],
     cidade: ['', Validators.required],
-    email: ['', [Validators.required, Validators.email]],
+    email: ['', [Validators.required, Validators.email], [emailExistenteValidator(this.emailService)]],
     senha: ['', [Validators.required, Validators.minLength(6)]],
     confirmaSenha: ['', Validators.required]
 }, formOptions);
