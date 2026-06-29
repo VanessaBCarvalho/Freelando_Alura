@@ -32,9 +32,12 @@ export const senhasIguaisValidator: ValidatorFn = (control: AbstractControl): Va
   templateUrl: './dados-pessoais-form.component.html',
   styleUrls: ['./dados-pessoais-form.component.scss']
 })
+
 export class DadosPessoaisFormComponent implements OnInit{
   dadosPessoaisForm!: FormGroup;
   formConfig!: FormConfig;
+
+  
 
  estado$!: Observable<Estado[]>;
  cidades$!: Observable<Cidade[]>;
@@ -76,6 +79,18 @@ this.configurarListernerEstado();
 
   isFieldType(field: FormFieldBase, type: string): boolean {
     return field.type === type;
+  }
+
+  hasField(name: string): boolean {  
+    return this.formConfig.fields.some(field => field.formControlName === name);  
+  } 
+
+  getFieldByName(name: string): FormFieldBase {
+    return (
+      this.formConfig.fields.find(
+        field => field.formControlName === name
+      ) || {} as FormFieldBase
+    );
   }
 
   private carregarEstados(): void {
